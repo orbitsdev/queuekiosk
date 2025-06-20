@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 // Primary color palette - from kiosqueeing design system
 const Color primaryColor = Color(0xFF085fc5); // kiosqueeing-primary (denim-800)
 const Color primaryHoverColor = Color(0xFF0d539b); // kiosqueeing-primary-hover
+const Color primaryDarkColor = Color(0xFF053a78); // darker version of primary for kiosk elements
 const Color secondaryColor = Color(0xFF334155); // kiosqueeing-text
 const Color backgroundColor = Color(0xFFF9FAFB); // kiosqueeing-background
 

@@ -13,37 +13,42 @@ class BranchCodeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: primaryColor,
       appBar: AppBar(
-        title: const Text('Kiosk Setup'),
+        title: const Text('Kiosk Setup', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold,color: Colors.white)),
         centerTitle: true,
+        backgroundColor: primaryColor,
+        elevation: 0,
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: primaryColor.withOpacity(0.1),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.business,
-                    size: 80,
-                    color: primaryColor,
-                  ),
-                ),
+      body: SafeArea(
+        child: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(24.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                    // Logo container with white circle
+                    Container(
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.business,
+                        size: 80,
+                        color: Colors.white,
+                      ),
+                    ),
                 const SizedBox(height: 32),
                 Text(
                   'Enter Branch Code',
                   style: Get.textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: primaryColor,
+                    color: Colors.white,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -51,25 +56,52 @@ class BranchCodeScreen extends StatelessWidget {
                 Text(
                   'Please enter your branch code to continue',
                   style: Get.textTheme.bodyLarge?.copyWith(
-                    color: Colors.grey[700],
+                    color: Colors.white.withOpacity(0.8),
                   ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 32),
-                TextFormField(
-                  controller: _codeController,
-                  decoration: InputDecoration(
-                    labelText: 'Branch Code',
-                    hintText: 'e.g. BR001',
-                    prefixIcon: Icon(Icons.code, color: primaryColor),
+                Card(
+                  elevation: 8,
+                  color: primaryDarkColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
                   ),
-                  textCapitalization: TextCapitalization.characters,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Please enter a branch code';
-                    }
-                    return null;
-                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    child: TextFormField(
+                      controller: _codeController,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      decoration: InputDecoration(
+                        labelText: 'Branch Code',
+                        labelStyle: TextStyle(
+                          color: Colors.white.withOpacity(0.8),
+                          fontSize: 18,
+                        ),
+                        hintText: 'e.g. BR001',
+                        hintStyle: TextStyle(
+                          color: Colors.white.withOpacity(0.5),
+                          fontSize: 16,
+                        ),
+                        prefixIcon: const Icon(Icons.code, color: Colors.white, size: 28),
+                        border: InputBorder.none,
+                        contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                        filled: true,
+                        fillColor: primaryDarkColor,
+                      ),
+                      textCapitalization: TextCapitalization.characters,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Please enter a branch code';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 24),
                 Obx(() => ElevatedButton(
@@ -81,21 +113,32 @@ class BranchCodeScreen extends StatelessWidget {
                         }
                       },
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    backgroundColor: primaryDarkColor,
+                    foregroundColor: Colors.white,
+                    elevation: 8,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    minimumSize: const Size(double.infinity, 64),
                   ),
                   child: _kioskController.isLoading.value
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2.0),
+                    ? SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.5,
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
                       )
-                    : const Text('CONTINUE', style: TextStyle(fontSize: 16)),
+                    : const Text('CONTINUE', 
+                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                 )),
               ],
             ),
           ),
         ),
-      ),
+      ),)
     );
   }
 }

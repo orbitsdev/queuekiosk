@@ -33,7 +33,14 @@ class _MainState extends State<KioskApp> {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: appTheme,
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: primaryColor,
+          primary: primaryColor,
+          secondary: secondaryColor,
+        ),
+      ),
       title: "Kiosk",
       getPages: [
         GetPage(
