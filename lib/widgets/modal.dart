@@ -1,21 +1,113 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
+
 class Modal {
-
-  // optoonal paremeter but has default title, message , ok label on clsoe 
-  static void success({String title = "Success", String message = "Operation completed successfully", String okLabel = "OK"}) {
-   
+  /// ✅ Show success modal with animation
+  static void success({
+    String title = "Success",
+    String message = "Operation completed successfully",
+    String okLabel = "OK",
+    VoidCallback? onOk,
+  }) {
+    Get.defaultDialog(
+      title: title,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Lottie.asset(
+            'assets/animations/success_animation.json',
+            width: 200,
+            height: 200,
+            fit: BoxFit.contain,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            message,
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+      textConfirm: okLabel,
+      confirmTextColor: Colors.white,
+      onConfirm: () {
+        Get.back();
+        if (onOk != null) onOk();
+      },
+    );
   }
 
-// use to display all error
-  static void error({String title = "Error", String message = "Operation failed", String okLabel = "OK"}) {
-   
+  /// ✅ Show error modal with animation
+  static void error({
+    String title = "Error",
+    String message = "Operation failed",
+    String okLabel = "OK",
+    VoidCallback? onOk,
+  }) {
+    Get.defaultDialog(
+      title: title,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Lottie.asset(
+            'assets/animations/error.json',
+            width: 200,
+            height: 200,
+            fit: BoxFit.contain,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            message,
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+      textConfirm: okLabel,
+      confirmTextColor: Colors.white,
+      onConfirm: () {
+        Get.back();
+        if (onOk != null) onOk();
+      },
+    );
   }
 
-  // use to every action that has confirmation
-  static void confirm({String title = "Confirm", String message = "Are you sure you want to perform this action?", String okLabel = "OK", String cancelLabel = "Cancel"}) {
-   
+  /// ✅ Show confirm modal with animation
+  static void confirm({
+    String title = "Confirm",
+    String message = "Are you sure you want to perform this action?",
+    String okLabel = "OK",
+    String cancelLabel = "Cancel",
+    VoidCallback? onConfirm,
+    VoidCallback? onCancel,
+  }) {
+    Get.defaultDialog(
+      title: title,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Lottie.asset(
+            'assets/animations/questionmark.json',
+            width: 200,
+            height: 200,
+            fit: BoxFit.contain,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            message,
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+      textConfirm: okLabel,
+      textCancel: cancelLabel,
+      confirmTextColor: Colors.white,
+      onConfirm: () {
+        Get.back();
+        if (onConfirm != null) onConfirm();
+      },
+      onCancel: () {
+        if (onCancel != null) onCancel();
+      },
+    );
   }
-
-  
-
-
 }
