@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kiosk/core/dio/dio_service.dart';
@@ -361,9 +362,18 @@ class KioskController extends GetxController {
     try {
       final statusCheck = await _printerService.checkPrinterStatusDetailed();
       
+      // Check if we're in emulator mode (already handled by PrinterService)
+      final bool isEmulator = statusCheck['isEmulator'] ?? false;
+      
       isPrinterReady.value = statusCheck['canPrint'] ?? false;
       isPaperOut.value = !(statusCheck['hasPaper'] ?? true);
       printerStatusMessage.value = statusCheck['statusMessage'] ?? 'Unknown printer status';
+      
+      // If in emulator mode, ensure the UI shows appropriate status
+      if (isEmulator) {
+        isPrinterReady.value = true;
+        isPaperOut.value = false;
+      }
     } catch (e) {
       isPrinterReady.value = false;
       printerStatusMessage.value = 'Error connecting to printer';

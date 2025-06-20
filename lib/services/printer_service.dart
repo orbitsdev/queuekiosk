@@ -98,6 +98,9 @@ class PrinterService {
   PrinterService._internal();
   
   bool _initialized = false;
+  // In a real app, we would detect this properly, but for this app
+  // we'll assume we're in an emulator when not in release mode
+  final bool _isEmulator = !kReleaseMode;
   
   Future<void> init() async {
     if (_initialized) return;
@@ -106,6 +109,10 @@ class PrinterService {
       await SunmiPrinter.bindingPrinter();
       await SunmiPrinter.initPrinter();
       _initialized = true;
+      
+      if (_isEmulator) {
+        debugPrint('Running on emulator - printer functionality will be simulated');
+      }
     } catch (e) {
       debugPrint('Failed to initialize printer: $e');
       _initialized = false;
@@ -115,6 +122,21 @@ class PrinterService {
   Future<bool> printTicket(Queue queue) async {
     if (!_initialized) {
       await init();
+    }
+    
+    // For emulators, simulate successful printing but still show the process
+    if (_isEmulator) {
+      debugPrint('Emulator detected: Simulating ticket printing for: ${queue.ticketNumber}');
+      // Show a success message to the user
+      Get.snackbar(
+        'Ticket Printed', 
+        'Ticket ${queue.ticketNumber} has been printed successfully (simulated in emulator)',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 3),
+      );
+      return true;
     }
     
     // Check printer status before attempting to print
@@ -179,6 +201,12 @@ class PrinterService {
       await init();
     }
     
+    // Always return true for emulators to avoid blocking UI flows
+    if (_isEmulator) {
+      debugPrint('Emulator detected: Simulating printer ready status');
+      return true;
+    }
+    
     try {
       final status = await SunmiPrinter.getPrinterStatus();
       return status == SunmiPrinterStatus.NORMAL;
@@ -192,6 +220,22 @@ class PrinterService {
   Future<Map<String, dynamic>> checkPrinterStatusDetailed() async {
     if (!_initialized) {
       await init();
+    }
+    
+    // For emulators, always return ready status to avoid blocking UI flows
+    if (_isEmulator) {
+      debugPrint('Emulator detected: Simulating printer ready status in detailed check');
+      return {
+        'status': SunmiPrinterStatus.NORMAL,
+        'hasPaper': true,
+        'coverOpen': false,
+        'overheated': false,
+        'isError': false,
+        'isReady': true,
+        'statusMessage': 'Printer ready (emulator mode)',
+        'canPrint': true,
+        'isEmulator': true,
+      };
     }
     
     try {

@@ -6,7 +6,6 @@ import 'package:kiosk/screens/branch_code_screen.dart';
 import 'package:kiosk/widgets/modal.dart';
 import 'package:kiosk/widgets/service_card.dart';
 import 'package:lottie/lottie.dart';
-import 'package:shimmer/shimmer.dart';
 
 class ServicesScreen extends StatefulWidget {
   const ServicesScreen({Key? key}) : super(key: key);
@@ -231,70 +230,47 @@ class _ServicesScreenState extends State<ServicesScreen> {
   }
 
   Widget _buildLoadingShimmer() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-      child: Shimmer.fromColors(
-        baseColor: Colors.grey[300]!,
-        highlightColor: Colors.grey[100]!,
-        child: ListView.separated(
-          separatorBuilder: (context, index) => const SizedBox(height: 12),
-          itemCount: 8, // Show 8 shimmer placeholders
-          itemBuilder: (context, index) {
-            return Container(
-              height: 80,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.grey.withOpacity(0.3), width: 1),
-                borderRadius: BorderRadius.circular(4),
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
-              child: Row(
-                children: [
-                  // Icon placeholder
-                  Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  // Text content placeholders
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Title placeholder
-                        Container(
-                          width: 120,
-                          height: 18,
-                          color: Colors.grey[300],
-                        ),
-                        const SizedBox(height: 8),
-                        // Waiting count placeholder
-                        Container(
-                          width: 80,
-                          height: 14,
-                          color: Colors.grey[300],
-                        ),
-                      ],
-                    ),
-                  ),
-                  // Arrow icon placeholder
-                  Container(
-                    width: 16,
-                    height: 16,
-                    color: Colors.grey[300],
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Circular progress indicator with white color
+          Container(
+            width: 100,
+            height: 100,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              shape: BoxShape.circle,
+            ),
+            child: const CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              strokeWidth: 4,
+            ),
+          ),
+          const SizedBox(height: 32),
+          // Loading text
+          const Text(
+            'Loading Services',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 16),
+          // Subtitle text
+          Text(
+            'Please wait while we fetch available services',
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.8),
+              fontSize: 16,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
-    );
+    ).animate().fadeIn(duration: 300.ms);
   }
 
 
