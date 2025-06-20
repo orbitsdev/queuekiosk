@@ -104,7 +104,7 @@ class KioskController extends GetxController {
   }
   
   /// ✅ API: Get branch details by code
-  /// Endpoint: GET /api/kiosk/branch/{code}
+  /// Endpoint: GET /api/branch/{code}
   Future<Either<Failure, Branch>> getBranchDetails(String branchCode) async {
     final result = await _dio.request(
       path: "/branch/$branchCode",

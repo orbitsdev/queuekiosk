@@ -5,90 +5,87 @@ class ServiceCard extends StatelessWidget {
   final Service service;
   final IconData icon;
   final VoidCallback onTap;
+  final bool showWaitingCount;
 
   const ServiceCard({
     Key? key,
     required this.service,
     required this.icon,
     required this.onTap,
+    this.showWaitingCount = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+    return Material(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(4),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(4),
         child: Container(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                theme.colorScheme.primary.withOpacity(0.05),
-                theme.colorScheme.primary.withOpacity(0.1),
-              ],
-            ),
+            border: Border.all(color: Colors.grey.withOpacity(0.3), width: 1),
+            borderRadius: BorderRadius.circular(4),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.primary.withOpacity(0.1),
-                  shape: BoxShape.circle,
+                  color: Theme.of(context).primaryColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(4),
                 ),
                 child: Icon(
                   icon,
-                  size: 48,
-                  color: theme.colorScheme.primary,
+                  size: 36,
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
-              const SizedBox(height: 16),
-              Text(
-                service.name ?? 'Unknown Service',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.primary.withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.people,
-                      size: 18,
-                      color: theme.colorScheme.primary,
-                    ),
-                    const SizedBox(width: 8),
                     Text(
-                      'Waiting: ${service.waitingCount ?? 0}',
+                      service.name ?? 'Unknown Service',
                       style: TextStyle(
-                        color: theme.colorScheme.primary,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
                       ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
+                    if (showWaitingCount) ...[  
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.people,
+                            size: 16,
+                            color: Colors.grey[700],
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            'Waiting: ${service.waitingCount ?? 0}',
+                            style: TextStyle(
+                              color: Colors.grey[700],
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ],
                 ),
+              ),
+              Icon(
+                Icons.arrow_forward_ios,
+                color: Theme.of(context).primaryColor,
+                size: 16,
               ),
             ],
           ),
