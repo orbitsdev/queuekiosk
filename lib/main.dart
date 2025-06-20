@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:get/get_navigation/src/routes/get_route.dart';
+import 'package:get/get.dart';
 import 'package:kiosk/controllers/kiosk_controller.dart';
-import 'package:kiosk/middleware/branch_middeware.dart';
+import 'package:kiosk/middleware/branch_middleware.dart';
 import 'package:kiosk/screens/branch_code_screen.dart';
 import 'package:kiosk/screens/not_authorize_screen.dart';
 import 'package:kiosk/screens/print_screen.dart';
@@ -39,13 +38,13 @@ class _MainState extends State<KioskApp> {
       getPages: [
         GetPage(
           name: '/branch-code',
-          page: () => const BranchCodeScreen(),
+          page: () => BranchCodeScreen(),
           middlewares: [
             NoBranchMiddleware(),
           ],
         ),
         GetPage(
-          name: '/not-authrize',
+          name: '/not-authorize',
           page: () => const NotAuthrizeScreen(),
           middlewares: [
             BranchMiddleware(),
@@ -66,7 +65,7 @@ class _MainState extends State<KioskApp> {
           ],
         ),
       ],
-      home: const BranchCodeScreen(),
+      home: BranchCodeScreen(),
     );
   }
 }

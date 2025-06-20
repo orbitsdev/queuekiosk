@@ -16,6 +16,9 @@ class Queue {
   final String? formattedDatetime;
   final Service? service;
   final Branch? branch;
+  
+  // Computed properties for date formatting
+  DateTime? get createdDateTime => createdAt != null ? DateTime.tryParse(createdAt!) : null;
 
   Queue({
     this.id,

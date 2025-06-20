@@ -16,7 +16,7 @@ class Modal {
         mainAxisSize: MainAxisSize.min,
         children: [
           Lottie.asset(
-            'assets/animations/success_animation.json',
+            'assets/animations/success.json',
             width: 200,
             height: 200,
             fit: BoxFit.contain,
@@ -107,6 +107,41 @@ class Modal {
       },
       onCancel: () {
         if (onCancel != null) onCancel();
+      },
+    );
+  }
+
+  /// Show a custom modal dialog with icon and custom actions
+  static void show({
+    required String title,
+    required String message,
+    IconData? icon,
+    Color? iconColor,
+    List<Widget>? actions,
+    VoidCallback? onClose,
+  }) {
+    Get.defaultDialog(
+      title: title,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (icon != null)
+            Icon(
+              icon,
+              size: 80,
+              color: iconColor ?? Colors.blue,
+            ),
+          const SizedBox(height: 16),
+          Text(
+            message,
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+      actions: actions,
+      onWillPop: () async {
+        if (onClose != null) onClose();
+        return true;
       },
     );
   }

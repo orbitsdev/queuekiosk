@@ -12,7 +12,7 @@ class DioService {
   late final dio.Dio _dio;
 
   // 🔑 Change this to match your backend base URL for the kiosk endpoints
-  static const String _baseUrl = "https://your-domain.com/api/kiosk";
+  static const String _baseUrl = "http://209.97.165.87/api";
 
   factory DioService() {
     return _instance;
