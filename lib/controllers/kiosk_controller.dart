@@ -20,6 +20,12 @@ class KioskController extends GetxController {
   final isQueueLoading = false.obs;
   final isPrinting = false.obs;
   final currentQueue = Rxn<Queue>();
+  
+  // Printer status variables
+  final isPrinterReady = true.obs;
+  final isPaperOut = false.obs;
+  final printerStatusMessage = 'Checking printer...'.obs;
+  final PrinterService _printerService = PrinterService();
   static KioskController instance = Get.find();
 
   final SharedPreferenceManager _storage = SharedPreferenceManager();
@@ -262,16 +268,14 @@ class KioskController extends GetxController {
 
   /// Print a queue ticket
   Future<void> printTicket(Queue queue) async {
-    final printerService = PrinterService();
-    
     try {
       isPrinting.value = true;
       
       // Initialize printer
-      await printerService.init();
+      await _printerService.init();
       
       // Check printer status with detailed information
-      final statusCheck = await printerService.checkPrinterStatusDetailed();
+      final statusCheck = await _printerService.checkPrinterStatusDetailed();
       
       // If printer is not ready, show appropriate warning
       if (!statusCheck['canPrint']) {
@@ -300,7 +304,7 @@ class KioskController extends GetxController {
       }
       
       // Print ticket
-      final printResult = await printerService.printTicket(queue);
+      final printResult = await _printerService.printTicket(queue);
       
       if (printResult) {
         Modal.success(
@@ -337,6 +341,33 @@ class KioskController extends GetxController {
   String formatTime(DateTime? date) {
     if (date == null) return 'N/A';
     return '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
+  }
+  
+  /// Check printer status periodically
+  Future<void> checkPrinterStatus() async {
+    // Initial check
+    await updatePrinterStatus();
+    
+    // Set up periodic check every 5 seconds
+    Future.delayed(const Duration(seconds: 5), () {
+      if (Get.isRegistered<KioskController>()) {
+        checkPrinterStatus();
+      }
+    });
+  }
+  
+  /// Update printer status variables
+  Future<void> updatePrinterStatus() async {
+    try {
+      final statusCheck = await _printerService.checkPrinterStatusDetailed();
+      
+      isPrinterReady.value = statusCheck['canPrint'] ?? false;
+      isPaperOut.value = !(statusCheck['hasPaper'] ?? true);
+      printerStatusMessage.value = statusCheck['statusMessage'] ?? 'Unknown printer status';
+    } catch (e) {
+      isPrinterReady.value = false;
+      printerStatusMessage.value = 'Error connecting to printer';
+    }
   }
 
   /// API: Create a queue ticket

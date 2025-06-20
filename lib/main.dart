@@ -14,9 +14,15 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   AppBinding().dependencies();
 
-  final kioscontroller = KioskController.instance;
+  final kioskController = KioskController.instance;
 
-  await kioscontroller.loadBranchCode();
+  // Load branch code and wait for it to complete
+  await kioskController.loadBranchCode();
+  
+  // Debug output to verify branch code state
+  print('MAIN: Branch code loaded');
+  print('MAIN: Branch code value: ${kioskController.branchCode.value}');
+  print('MAIN: Branch code empty: ${kioskController.branchCode.value.isEmpty}');
 
   runApp(const KioskApp());
 }
@@ -31,6 +37,9 @@ class KioskApp extends StatefulWidget {
 class _MainState extends State<KioskApp> {
   @override
   Widget build(BuildContext context) {
+    final kioskController = KioskController.instance;
+    final bool hasBranchCode = kioskController.branchCode.value.isNotEmpty;
+    
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -72,7 +81,9 @@ class _MainState extends State<KioskApp> {
           ],
         ),
       ],
-      home: BranchCodeScreen(),
+      initialRoute: hasBranchCode ? '/services' : '/branch-code',
+      // Don't use home when using initialRoute
+      // home: BranchCodeScreen(),
     );
   }
 }

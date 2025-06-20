@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:kiosk/controllers/kiosk_controller.dart';
+import 'package:kiosk/screens/branch_code_screen.dart';
 import 'package:kiosk/widgets/modal.dart';
 import 'package:kiosk/widgets/service_card.dart';
 import 'package:lottie/lottie.dart';
@@ -20,7 +21,10 @@ class _ServicesScreenState extends State<ServicesScreen> {
   @override
   void initState() {
     super.initState();
-    _kioskController.loadServices();
+    // Use addPostFrameCallback to avoid setState during build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _kioskController.loadServices();
+    });
   }
 
   @override
@@ -62,8 +66,10 @@ class _ServicesScreenState extends State<ServicesScreen> {
                   title: 'Log Out',
                   message: 'Are you sure you want to log out from this branch?',
                   onConfirm: () async {
-                    _kioskController.clearBranchData();
-                    Get.offAllNamed('/branch-code');
+                    await _kioskController.clearBranchData();
+                    // Use offAll to clear the navigation stack completely
+                    // and prevent any middleware from running during this transition
+                    Get.offAll(() => BranchCodeScreen());
                   },
                 );
               }
