@@ -73,34 +73,40 @@ class PrinterService {
       // Start transaction print - this is important for Sunmi printers
       await SunmiPrinter.startTransactionPrint(true);
       
-      // Print header
+      // Print header with divider
       await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER);
       await SunmiPrinter.printText('QUEUE TICKET',
-          style: SunmiStyle(bold: true, fontSize: SunmiFontSize.XL));
+          style: SunmiStyle(bold: true, fontSize: SunmiFontSize.LG));
       await SunmiPrinter.lineWrap(1);
       
-      // Print ticket number in large font
+      // Print ticket number in extra large font - centered for emphasis
       await SunmiPrinter.setFontSize(SunmiFontSize.XL);
-      await SunmiPrinter.printText(queue.ticketNumber ?? 'N/A');
+      await SunmiPrinter.printText('${queue.number ?? 'N/A'}',
+          style: SunmiStyle(bold: true, fontSize: SunmiFontSize.XL));
       await SunmiPrinter.resetFontSize();
       await SunmiPrinter.lineWrap(1);
       
-      // Print service and branch info
-      await SunmiPrinter.setAlignment(SunmiPrintAlign.LEFT);
-      await SunmiPrinter.printText('Service: ${queue.service?.name ?? 'Unknown'}');
-      await SunmiPrinter.printText('Branch: ${queue.branch?.name ?? 'Unknown'}');
+      // Print service and branch info - centered for better visual appeal
+      await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER);
+      await SunmiPrinter.printText('${queue.service?.name ?? 'Unknown Service'}',
+          style: SunmiStyle(bold: true));
+      await SunmiPrinter.printText('${queue.branch?.name ?? 'Unknown Branch'}');
       await SunmiPrinter.lineWrap(1);
       
-      // Print date and time
+      // Print date and time - centered for better visual appeal
       final date = queue.formattedDate ?? formatDate(queue.createdDateTime);
       final time = queue.formattedTime ?? formatTime(queue.createdDateTime);
-      await SunmiPrinter.printText('Date: $date');
-      await SunmiPrinter.printText('Time: $time');
+      await SunmiPrinter.printText('$date  $time');
       await SunmiPrinter.lineWrap(1);
       
-      // Print footer
-      await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER);
-      await SunmiPrinter.printText('Thank you for your visit!');
+      // Print QR code - centered for visual appeal
+      // Generate QR code with the ticket number (using queue.number for consistency)
+      await SunmiPrinter.printQRCode('TICKET:${queue.number}', size: 8, errorLevel: SunmiQrcodeLevel.LEVEL_H);
+      await SunmiPrinter.lineWrap(1);
+      
+      // Print footer - centered for visual appeal
+      await SunmiPrinter.printText('Thank you for your visit!',
+          style: SunmiStyle(bold: false, fontSize: SunmiFontSize.MD));
       await SunmiPrinter.lineWrap(2);
       
       // Cut paper if supported
