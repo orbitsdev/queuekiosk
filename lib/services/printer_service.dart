@@ -75,15 +75,21 @@ class PrinterService {
       
       // Print header with divider
       await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER);
-      await SunmiPrinter.printText('QUEUE TICKET',
+      await SunmiPrinter.printText('YOUR NUMBER',
           style: SunmiStyle(bold: true, fontSize: SunmiFontSize.LG));
       await SunmiPrinter.lineWrap(1);
       
       // Print ticket number in extra large font - centered for emphasis
+      // This is the simple number (like "1", "2", "3") that customers will wait for
       await SunmiPrinter.setFontSize(SunmiFontSize.XL);
       await SunmiPrinter.printText('${queue.number ?? 'N/A'}',
           style: SunmiStyle(bold: true, fontSize: SunmiFontSize.XL));
       await SunmiPrinter.resetFontSize();
+      await SunmiPrinter.lineWrap(1);
+      
+      // Print a note about the number
+      await SunmiPrinter.printText('Please wait for this number',
+          style: SunmiStyle(bold: false, fontSize: SunmiFontSize.MD));
       await SunmiPrinter.lineWrap(1);
       
       // Print service and branch info - centered for better visual appeal
@@ -93,6 +99,11 @@ class PrinterService {
       await SunmiPrinter.printText('${queue.branch?.name ?? 'Unknown Branch'}');
       await SunmiPrinter.lineWrap(1);
       
+      // Print Ticket ID in smaller text - less prominent
+      await SunmiPrinter.printText('ID: ${queue.ticketNumber ?? 'N/A'}',
+          style: SunmiStyle(fontSize: SunmiFontSize.SM));
+      await SunmiPrinter.lineWrap(1);
+      
       // Print date and time - centered for better visual appeal
       final date = queue.formattedDate ?? formatDate(queue.createdDateTime);
       final time = queue.formattedTime ?? formatTime(queue.createdDateTime);
@@ -100,8 +111,8 @@ class PrinterService {
       await SunmiPrinter.lineWrap(1);
       
       // Print QR code - centered for visual appeal
-      // Generate QR code with the ticket number (using queue.number for consistency)
-      await SunmiPrinter.printQRCode('TICKET:${queue.number}', size: 8, errorLevel: SunmiQrcodeLevel.LEVEL_H);
+      // Generate QR code with the ticket number (using ticketNumber for unique identification)
+      await SunmiPrinter.printQRCode('https://queue.ticket/${queue.ticketNumber}', size: 8, errorLevel: SunmiQrcodeLevel.LEVEL_H);
       await SunmiPrinter.lineWrap(1);
       
       // Print footer - centered for visual appeal
