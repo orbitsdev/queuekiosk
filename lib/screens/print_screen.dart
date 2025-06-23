@@ -347,7 +347,31 @@ class _PrintScreenState extends State<PrintScreen> {
                   ),
                 )),
                 const SizedBox(height: 24),
-                // Large, easy-to-tap buttons for kiosk use
+                // Print Ticket button
+                Obx(() => ElevatedButton.icon(
+                  onPressed: _kioskController.isPrinting.value
+                      ? null
+                      : () => _kioskController.printTicket(_kioskController.currentQueue.value!),
+                  icon: _kioskController.isPrinting.value
+                      ? const SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Icon(Icons.print, size: 28),
+                  label: Text(_kioskController.isPrinting.value ? 'Printing...' : 'Print Ticket'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: theme.primaryColor,
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                )),
+                const SizedBox(height: 16),
+                // Get Another Ticket button
                 ElevatedButton.icon(
                   onPressed: _kioskController.getNewTicket,
                   icon: const Icon(Icons.add, size: 28),

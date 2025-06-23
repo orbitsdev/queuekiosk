@@ -47,7 +47,7 @@ dependencies:
   sliver_tools: ^0.2.12
   flutter_animate: ^4.5.2
   qr_flutter: ^4.1.0
-  sunmi_printer_plus: ^4.1.0
+  sunmi_printer_plus: ^2.0.2
   shimmer: ^3.0.0
 
 dev_dependencies:

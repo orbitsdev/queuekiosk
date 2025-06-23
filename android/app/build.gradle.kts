@@ -7,7 +7,8 @@
 
 android {
     namespace = "com.example.kiosk"
-    compileSdk = flutter.compileSdkVersion
+    //compileSdk = flutter.compileSdkVersion
+     compileSdk = 34 // or 33
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -27,7 +28,8 @@ android {
         //minSdk = flutter.minSdkVersion
         minSdk = 21
         //targetSdk = flutter.targetSdkVersion
-        targetSdk = 28
+        //targetSdk = 28
+        targetSdk = 34  // ✅ Must be 33 or higher for lint & Play
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
