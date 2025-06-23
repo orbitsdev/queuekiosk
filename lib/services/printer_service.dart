@@ -80,64 +80,71 @@ class PrinterService {
       // Start transaction print - this is important for Sunmi printers
       await SunmiPrinter.startTransactionPrint(true);
       
-      // Force center alignment for all content
+      // Force center alignment for all content - critical for Sunmi printers
       await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER);
       
-      // Add a small blank space at the top
-      await SunmiPrinter.lineWrap(1);
+      // No extra space at top - start immediately
       
-      // Print header
+      // Print header - explicitly centered
+      await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER);
       await SunmiPrinter.printText('YOUR NUMBER',
-          style: SunmiStyle(bold: true, fontSize: SunmiFontSize.LG));
+          style: SunmiStyle(bold: true, fontSize: SunmiFontSize.LG, align: SunmiPrintAlign.CENTER));
       
-      // Print ticket number in extra large font
-      await SunmiPrinter.lineWrap(1);
+      // Print ticket number in extra large font - explicitly centered
+      // No line wrap to reduce spacing
+      await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER);
       await SunmiPrinter.setFontSize(SunmiFontSize.XL);
       await SunmiPrinter.printText('${queue.number ?? 'N/A'}',
-          style: SunmiStyle(bold: true, fontSize: SunmiFontSize.XL));
+          style: SunmiStyle(bold: true, fontSize: SunmiFontSize.XL, align: SunmiPrintAlign.CENTER));
       await SunmiPrinter.resetFontSize();
       
-      // Print a note about the number
-      await SunmiPrinter.lineWrap(1);
+      // Print a note about the number - explicitly centered
+      // No line wrap to reduce spacing
+      await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER);
       await SunmiPrinter.printText('Please wait for this number',
-          style: SunmiStyle(bold: false, fontSize: SunmiFontSize.MD));
+          style: SunmiStyle(bold: false, fontSize: SunmiFontSize.MD, align: SunmiPrintAlign.CENTER));
       
-      // Print service and branch info
-      await SunmiPrinter.lineWrap(1);
+      // Print service and branch info - explicitly centered
+      // No line wrap to reduce spacing
       await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER); // Reinforce center alignment
       await SunmiPrinter.printText('${queue.service?.name ?? 'Unknown Service'}',
-          style: SunmiStyle(bold: true));
-      await SunmiPrinter.printText('${queue.branch?.name ?? 'Unknown Branch'}');
+          style: SunmiStyle(bold: true, align: SunmiPrintAlign.CENTER));
+      await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER); // Reinforce center alignment before each print
+      await SunmiPrinter.printText('${queue.branch?.name ?? 'Unknown Branch'}',
+          style: SunmiStyle(align: SunmiPrintAlign.CENTER));
       
-      // Print Ticket ID in smaller text
-      await SunmiPrinter.lineWrap(1);
+      // Print Ticket ID in smaller text - explicitly centered
+      // No line wrap to reduce spacing
       await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER); // Reinforce center alignment
       await SunmiPrinter.printText('ID: ${queue.ticketNumber ?? 'N/A'}',
-          style: SunmiStyle(fontSize: SunmiFontSize.SM));
+          style: SunmiStyle(fontSize: SunmiFontSize.SM, align: SunmiPrintAlign.CENTER));
       
-      // Print date and time
-      await SunmiPrinter.lineWrap(1);
+      // Print date and time - explicitly centered
+      // No line wrap to reduce spacing
       final date = queue.formattedDate ?? formatDate(queue.createdDateTime);
       final time = queue.formattedTime ?? formatTime(queue.createdDateTime);
       await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER); // Reinforce center alignment
-      await SunmiPrinter.printText('$date  $time');
+      await SunmiPrinter.printText('$date  $time',
+          style: SunmiStyle(align: SunmiPrintAlign.CENTER));
       
-      // Print QR code
-      await SunmiPrinter.lineWrap(1);
-      await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER); // Critical for QR code centering
-      // Use a smaller QR code size for better centering
+      // Print QR code - explicitly centered with extra alignment commands
+      // No line wrap to reduce spacing
+      // Multiple alignment commands to ensure centering
+      await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER);
+      await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER); // Double alignment command for emphasis
+      
+      // Use a smaller QR code size (3) for better centering and to save space
       await SunmiPrinter.printQRCode('https://queue.ticket/${queue.ticketNumber}', 
-          size: 5, // Smaller size for better centering
+          size: 3, // Even smaller size for better centering and to save space
           errorLevel: SunmiQrcodeLevel.LEVEL_H);
       
-      // Print footer
-      await SunmiPrinter.lineWrap(1);
+      // Print footer - explicitly centered
+      // No line wrap to reduce spacing
       await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER); // Reinforce center alignment
       await SunmiPrinter.printText('Thank you for your visit!',
-          style: SunmiStyle(bold: false, fontSize: SunmiFontSize.MD));
+          style: SunmiStyle(bold: false, fontSize: SunmiFontSize.SM, align: SunmiPrintAlign.CENTER));
       
-      // Add a small blank space at the bottom before cutting
-      await SunmiPrinter.lineWrap(1);
+      // No extra space at bottom to save paper
       
       // Cut paper if supported
       await SunmiPrinter.cut();
