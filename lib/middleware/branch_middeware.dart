@@ -9,7 +9,8 @@ class BranchMiddleware extends GetMiddleware {
 
     // If NO branchCode, redirect to /branch-code
     if (kioskController.branchCode.value.isEmpty) {
-      return const RouteSettings(name: '/branch-code');
+      // return const RouteSettings(name: '/branch-code');
+      return const RouteSettings(name: '/test-page');
     }
 
     // Otherwise allow

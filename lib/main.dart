@@ -8,6 +8,7 @@ import 'package:kiosk/screens/print_screen.dart';
 import 'package:kiosk/screens/services_screen.dart';
 import 'package:kiosk/middleware/no_branch_middleware.dart';
 import 'package:kiosk/core/getx/app_binding.dart';
+import 'package:kiosk/screens/test_screen.dart';
 import 'package:kiosk/utils/app_theme.dart';
 
 Future<void> main() async {
@@ -56,32 +57,40 @@ class _MainState extends State<KioskApp> {
           name: '/branch-code',
           page: () => BranchCodeScreen(),
           middlewares: [
-            NoBranchMiddleware(),
+            // NoBranchMiddleware(),
           ],
         ),
         GetPage(
           name: '/not-authorize',
           page: () => const NotAuthrizeScreen(),
           middlewares: [
-            BranchMiddleware(),
+            // BranchMiddleware(),
           ],
         ),
         GetPage(
           name: '/services',
           page: () => const ServicesScreen(),
           middlewares: [
-            BranchMiddleware(),
+            // BranchMiddleware(),
           ],
         ),
         GetPage(
           name: '/print',
           page: () => const PrintScreen(),
           middlewares: [
-            BranchMiddleware(),
+            // BranchMiddleware(),
+          ],
+        ),
+        GetPage(
+          name: '/test-page',
+          page: () => const TestScreen(),
+          middlewares: [
+          
           ],
         ),
       ],
-      initialRoute: hasBranchCode ? '/services' : '/branch-code',
+      
+      initialRoute: '/test-page',
       // Don't use home when using initialRoute
       // home: BranchCodeScreen(),
     );

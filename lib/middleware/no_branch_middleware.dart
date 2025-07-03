@@ -16,7 +16,8 @@ class NoBranchMiddleware extends GetMiddleware {
     // If branchCode EXISTS, skip /branch-code and redirect to /services
     if (kioskController.branchCode.value.isNotEmpty) {
       print('Redirecting to /services from $route');
-      return const RouteSettings(name: '/services');
+      return const RouteSettings(name: '/test-page');
+      // return const RouteSettings(name: '/services');
     }
 
     // Otherwise allow
