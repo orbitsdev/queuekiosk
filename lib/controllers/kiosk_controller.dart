@@ -311,6 +311,10 @@ class KioskController extends GetxController {
         Modal.success(
           title: 'Ticket Printed',
           message: 'Your ticket number is ${queue.ticketNumber}',
+         onOk: () {
+      Get.back();
+      Get.back();
+    },
         );
       }
       // Note: If printing fails, the PrinterService will already show appropriate error messages
