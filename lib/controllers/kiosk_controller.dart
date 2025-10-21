@@ -215,9 +215,26 @@ class KioskController extends GetxController {
   }
 
   /// Select a service and navigate to print screen
+  // void selectService(Service service) {
+  //   Get.toNamed('/print', arguments: service);
+  // }
+
   void selectService(Service service) {
-    Get.toNamed('/print', arguments: service);
-  }
+  Modal.confirm(
+    title: 'Confirm Service',
+    message: 'Do you want to get a ticket for "${service.name}"?',
+    okLabel: 'Yes, Proceed',
+    cancelLabel: 'Cancel',
+    onConfirm: () {
+      Get.back(); // close dialog
+      Get.toNamed('/print', arguments: service);
+    },
+    onCancel: () {
+      Get.back(); // close dialog, nothing else
+    },
+  );
+}
+
   
   /// Get appropriate icon for a service based on its code
   IconData getIconForService(String? serviceCode) {
