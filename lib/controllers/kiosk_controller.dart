@@ -327,7 +327,7 @@ class KioskController extends GetxController {
       if (printResult) {
         Modal.success(
           title: 'Ticket Printed',
-          message: 'Your ticket number is ${queue.ticketNumber}',
+          message: 'Your ticket number is ${queue.number}',
          onOk: () {
       Get.back();
       Get.back();
@@ -426,4 +426,10 @@ class KioskController extends GetxController {
       },
     );
   }
+
+  void resetQueueState() {
+  currentQueue.value = null;
+  isQueueLoading.value = false;
+}
+
 }

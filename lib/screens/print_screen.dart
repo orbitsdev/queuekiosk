@@ -24,6 +24,12 @@ class _PrintScreenState extends State<PrintScreen> {
     _kioskController.createQueueTicket(_service);
   }
   
+
+  @override
+  void dispose() {
+    _kioskController.resetQueueState();
+    super.dispose();
+  }
   // Show dialog to enter branch code
   void _showBranchCodeDialog() {
     final branchCodeController = TextEditingController();
